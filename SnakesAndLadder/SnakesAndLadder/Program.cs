@@ -24,7 +24,15 @@ namespace SnakesAndLadder
                         break;
                     // Ladder
                     case 1:
-                        position += rollDice;
+
+                        if (position != 100 && position < 100)
+                        {
+                            int currentPos = position + rollDice;
+                            if (currentPos <= 100)
+                            {
+                                position += rollDice;
+                            }
+                        }
                         Console.WriteLine("Player moved to {0} position", position);
                         break;
                     // Snake bite
