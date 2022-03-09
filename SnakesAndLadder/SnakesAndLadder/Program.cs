@@ -10,10 +10,12 @@ namespace SnakesAndLadder
         }
         static void Main(string[] args)
         {
+            int diceCount = 0;
             int position = 0;
             while (position != 100 && position <= 100)
             {
                 int rollDice = RollDice();
+                diceCount++;
                 Console.WriteLine("PLayer got {0} on dice", rollDice);
                 int checkOption = new Random().Next(0, 3);
                 switch (checkOption)    //Player checks an option
@@ -49,6 +51,7 @@ namespace SnakesAndLadder
                         break;
                 }
             }
+            Console.WriteLine("Number of times Dice rolled " + diceCount);
 
         }
     }
