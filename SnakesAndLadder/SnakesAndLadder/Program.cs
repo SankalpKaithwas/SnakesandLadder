@@ -1,58 +1,84 @@
-﻿using System;
+﻿
+using System;
 
 namespace SnakesAndLadder
 {
-    internal class Program
+    public class SnakesAndLadders
     {
+        private int _playerOnePos = 0;
+        private int _playerTwoPos = 0;
         public static int RollDice()
         {
             return new Random().Next(1, 7);
         }
-        static void Main(string[] args)
+        public static int PlayerTurns()
         {
-            int diceCount = 0;
             int position = 0;
-            while (position != 100 && position <= 100)
-            {
-                int rollDice = RollDice();
-                diceCount++;
-                Console.WriteLine("PLayer got {0} on dice", rollDice);
-                int checkOption = new Random().Next(0, 3);
-                switch (checkOption)    //Player checks an option
-                {   // No play
-                    case 0:
-                        position += 0;
-                        Console.WriteLine("Player stayed at {0} position", position);
-                        break;
-                    // Ladder
-                    case 1:
+            int rollDice = RollDice();
 
-                        if (position != 100 && position < 100)
-                        {
-                            int currentPos = position + rollDice;
-                            if (currentPos <= 100)
-                            {
-                                position += rollDice;
-                            }
-                        }
-                        Console.WriteLine("Player moved to {0} position", position);
-                        break;
-                    // Snake bite
-                    case 2:
-                        if (position >= rollDice)
-                        {
-                            position -= rollDice;
-                        }
-                        else
-                        {
-                            position = 0;
-                        }
-                        Console.WriteLine("Player moved back to {0} position", position);
-                        break;
+            int checkOption = new Random().Next(0, 3);
+            switch (checkOption)    //Player checks an option
+            {   // No play
+                case 0:
+                    position += 0;
+                    break;
+                // Ladder
+                case 1:
+                    int rollAgain = RollDice();
+                    position += rollAgain;
+                    break;
+                // Snake bite
+                case 2:
+                    if (position > 0)
+                    {
+                        position -= rollDice;
+                    }
+                    break;
+            }
+            return position;
+        }
+
+        public void CheckWin()
+        {
+            while (_playerOnePos <= 100 && _playerTwoPos <= 100)
+            {
+                int playerOne = PlayerTurns();
+                int nextPosOne = _playerOnePos + playerOne;
+                if (_playerOnePos == 100)
+                {
+                    Console.WriteLine("Player One wins");
+                    break;
+                }
+
+                else if (nextPosOne <= 100)
+                {
+                    _playerOnePos += playerOne;
+                }
+                int playerTwo = PlayerTurns();
+                int nextPosTwo = _playerOnePos + playerTwo;
+
+                if (_playerTwoPos == 100)
+                {
+                    Console.WriteLine("Player two wins");
+                    break;
+                }
+
+                else if (nextPosTwo <= 100)
+                {
+                    _playerTwoPos += PlayerTurns();
                 }
             }
-            Console.WriteLine("Number of times Dice rolled " + diceCount);
+        }
+    }
 
+    internal class Program
+    {
+
+        static void Main(string[] args)
+        {
+            SnakesAndLadders winner = new SnakesAndLadders();
+            winner.CheckWin();
         }
     }
 }
+
