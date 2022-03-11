@@ -11,61 +11,57 @@ namespace SnakesAndLadder
         {
             return new Random().Next(1, 7);
         }
-        public static int PlayerTurns()
+        public static int PlayerTurns(int Position)
         {
-            int position = 0;
             int rollDice = RollDice();
-
             int checkOption = new Random().Next(0, 3);
             switch (checkOption)    //Player checks an option
             {   // No play
                 case 0:
-                    position += 0;
+                    Position += 0;
                     break;
                 // Ladder
                 case 1:
                     int rollAgain = RollDice();
-                    position += rollAgain;
+                    int currentPos = Position + rollAgain;
+                    if (currentPos <= 100)
+                    {
+                        Position += rollAgain;
+                    }
                     break;
                 // Snake bite
                 case 2:
-                    if (position > 0)
+                    if (Position > 0)
                     {
-                        position -= rollDice;
+                        Position -= rollDice;
                     }
                     break;
             }
-            return position;
+            return Position;
         }
 
         public void CheckWin()
         {
-            while (_playerOnePos <= 100 && _playerTwoPos <= 100)
+            while (_playerOnePos != 100 && _playerTwoPos != 100)
             {
-                int playerOne = PlayerTurns();
-                int nextPosOne = _playerOnePos + playerOne;
+                //Player One
+                int playerOne = PlayerTurns(_playerOnePos);
+                _playerOnePos = playerOne;
+
                 if (_playerOnePos == 100)
                 {
                     Console.WriteLine("Player One wins");
                     break;
                 }
 
-                else if (nextPosOne <= 100)
-                {
-                    _playerOnePos += playerOne;
-                }
-                int playerTwo = PlayerTurns();
-                int nextPosTwo = _playerOnePos + playerTwo;
+                // Player Two
+                int playerTwo = PlayerTurns(_playerTwoPos);
+                _playerTwoPos = playerTwo;
 
                 if (_playerTwoPos == 100)
                 {
-                    Console.WriteLine("Player two wins");
+                    Console.WriteLine("Player Two wins");
                     break;
-                }
-
-                else if (nextPosTwo <= 100)
-                {
-                    _playerTwoPos += PlayerTurns();
                 }
             }
         }
@@ -73,7 +69,6 @@ namespace SnakesAndLadder
 
     internal class Program
     {
-
         static void Main(string[] args)
         {
             SnakesAndLadders winner = new SnakesAndLadders();
